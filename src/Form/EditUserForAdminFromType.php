@@ -4,9 +4,9 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -30,13 +30,13 @@ class EditUserForAdminFromType extends AbstractType
                     'Админ-Студент-Преподаватель' => "ROLE_ASTUDENT_ATEACHER",
                 ],
             ))
-            ->add('first_name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
+            ->add('first_name', TextType::class, [
                 'label' => 'Имя'
             ])
-            ->add('last_name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
+            ->add('last_name', TextType::class, [
                 'label' => 'Фамилия'
             ])
-            ->add('middle_name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
+            ->add('middle_name', TextType::class, [
                 'label' => 'Отчество'
             ])
         ;

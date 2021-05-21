@@ -83,7 +83,7 @@ class AdminUserController extends AdminBaseController
      * @return RedirectResponse|Response
      */
 
-    public function EditUser(User $user, \Symfony\Component\HttpFoundation\Request $request, EntityManagerInterface $em) :Response
+    public function EditUser(User $user, Request $request, EntityManagerInterface $em) :Response
     {
         $form = $this->createForm(EditUserForAdminFromType::class,$user);
         $form->handleRequest($request);
