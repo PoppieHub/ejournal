@@ -1,16 +1,10 @@
-{% extends 'admin/adminbase.html.twig' %}
-{% block title %}{{ title }}{% endblock %}
-{% block body %}
-    <div class="container-fluid">
-        <div class="row no-gutters">
-            <div class="col-12">
-                <h1 class="display-5 text-center mt-2">
-                    {{ title }}
-                </h1>
-            </div>
-        </div>
-    </div>
+{% extends 'admin/baseAdminProfile.html.twig' %}
 
+{% block contentTitle %}
+    <h1>{{ title }}</h1>
+{% endblock %}
+
+{% block content %}
 
 
 {% endblock %}

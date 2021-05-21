@@ -28,9 +28,6 @@ class UserType extends AbstractType
                 'second_options' => array(
                     'label' => 'Подтвердите пароль',
                 ),
-            ))
-            ->add('save', SubmitType::class, array(
-                'label' => 'Отправить'
             ));
     }
 

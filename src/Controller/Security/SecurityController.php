@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    public const FLASH_INFO = 'info';
+    private const FLASH_INFO = 'info';
 
     /**
      * @Route("/login", name="app_login")

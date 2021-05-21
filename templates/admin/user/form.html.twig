@@ -14,7 +14,15 @@
     <div class="container">
         <div class="row no-gutters justify-content-center align-items-center mt-5">
             <div class="col-6">
-                {{ form(form) }}
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <div class="d-grid gap-2 mx-auto">
+                    <button class="btn btn-primary mt-5" type="submit">
+                        Создать
+                    </button>
+                </div>
+                {{ form_end(form) }}
             </div>
         </div>
     </div>

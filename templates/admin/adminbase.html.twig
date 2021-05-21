@@ -30,10 +30,6 @@
                         <a class="nav-link" target="_blank" href="{{ path('home') }}">Выход на сайт</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ path('admin_user') }}">Пользователи</a>
-                    </li>
-
                 </ul>
             </div>
             <form class="form-inline" >
@@ -41,7 +37,7 @@
             </form>
         </div>
     </nav>
-        {% block body %}{% endblock %}
+    {% block body %}{% endblock %}
 
         {% block javascripts %}
             <!-- Optional JavaScript -->
