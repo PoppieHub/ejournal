@@ -12,6 +12,6 @@ class TeacherController extends BaseController
     public function index()
     {
         $forRender = parent::renderDefault();
-        return $this->render('main/teacher/teacher.html.twig', $forRender);
+        return $this->render('', $forRender);
     }
 }
