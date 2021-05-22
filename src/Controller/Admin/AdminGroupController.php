@@ -22,7 +22,10 @@ class AdminGroupController extends AdminBaseController
 
     public function index()
     {
-        $group = $this->getDoctrine()->getRepository(Group::class)->findAll();
+        $group = $this->getDoctrine()->getRepository(Group::class)->findBy(
+            array(),
+            array('group_name' => 'ASC')
+        );
 
         $forRender = parent::renderDefault();
         $forRender['title'] = 'Группы';

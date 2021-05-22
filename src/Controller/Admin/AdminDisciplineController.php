@@ -22,7 +22,10 @@ class AdminDisciplineController extends AdminBaseController
 
     public function index()
     {
-        $discipline = $this->getDoctrine()->getRepository(Discipline::class)->findAll();
+        $discipline = $this->getDoctrine()->getRepository(Discipline::class)->findBy(
+            array(),
+            array('name_discipline' => 'ASC')
+        );
 
         $forRender = parent::renderDefault();
         $forRender['title'] = 'Дисциплины';

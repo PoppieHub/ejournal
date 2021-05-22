@@ -22,7 +22,10 @@ class AdminMarkController extends AdminBaseController
 
     public function index()
     {
-        $mark = $this->getDoctrine()->getRepository(Plus::class)->findAll();
+        $mark = $this->getDoctrine()->getRepository(Plus::class)->findBy(
+            array(),
+            array('id' => 'ASC')
+        );
 
         $forRender = parent::renderDefault();
         $forRender['title'] = 'Отметки';

@@ -32,7 +32,9 @@
             <form class="form-inline" >
                 <div class="btn-group" role="group">
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <a href="{{ path('admin_home') }}" class="navbar-brand btn btn-outline" type="submit"><i class="fas fa-user-astronaut"></i></a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('admin_home') }}" class="navbar-brand btn btn-outline" type="submit"><i class="fas fa-user-astronaut"></i></a>
+                        {% endif %}
                         <a href="{{ path('_profile') }}" class="navbar-brand btn btn-outline" type="submit"><i class="fas fa-cog"></i></a>
                         <a href="{{ path('app_logout') }}" class="navbar-brand btn btn-outline" type="submit"><i class="fas fa-sign-out-alt"></i></a>
                     {% else %}

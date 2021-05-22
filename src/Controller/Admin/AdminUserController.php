@@ -26,7 +26,11 @@ class AdminUserController extends AdminBaseController
 
     public function index()
     {
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        //$users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $users = $this->getDoctrine()->getRepository(User::class)->findBy(
+            array(),
+            array('id' => 'DESC')
+        );
 
         $forRender = parent::renderDefault();
         $forRender['title'] = 'Пользователи';

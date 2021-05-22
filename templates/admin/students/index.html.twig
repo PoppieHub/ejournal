@@ -1,0 +1,53 @@
+{% extends 'admin/baseAdminProfile.html.twig' %}
+
+
+{% block contentTitle %}
+    <h1>{{ title }}</h1>
+    {% for info in app.flashes('info') %}
+        <div class="alert alert-success alert-dismissible fade show position-relative" role="alert">
+            <strong>{{ info }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row no-gutters">
+            <div class="col-12 mt-4">
+                <h2>Список Студентов</h2>
+                {% set count = 0 %}
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Фамилия</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Отчество</th>
+                        <th scope="col">Группа</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                            {% set count = count + 1 %}
+                            <tr>
+                                <th scope="row">{{ count }}</th>
+                                <td>{{ student.last_name }}</td>
+                                <td>{{ student.first_name }}</td>
+                                <td>{{ student.middle_name }}</td>
+                                <td>{{ student.group_name }}</td>
+                                <td>
+                                    <a href="{{ path('admin_student_delete', {id: student.id})}}" type="button" class="btn btn-outline-danger"><i class="far fa-trash-alt"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -18,7 +18,7 @@ class HomeController extends BaseController
     }
 
     #[Route('/user/profile', name: '_profile')]
-    public function profiler(): Response
+    public function profile(): Response
     {
         $user = $this->getUser();
         //dd($user);
