@@ -76,7 +76,7 @@ class AdminGroupController extends AdminBaseController
      * @return RedirectResponse|Response
      */
 
-    public function EditGroup(Group $group, Request $request, EntityManagerInterface $em) :Response
+    public function editGroup(Group $group, Request $request, EntityManagerInterface $em) :Response
     {
         $form = $this->createForm(CreateGroupFromType::class,$group);
         $form->handleRequest($request);

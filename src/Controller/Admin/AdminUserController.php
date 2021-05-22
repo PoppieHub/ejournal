@@ -3,6 +3,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Student;
+use App\Entity\Teacher;
 use App\Entity\User;
 use App\Form\EditUserForAdminFromType;
 use App\Form\UserType;
@@ -83,7 +85,7 @@ class AdminUserController extends AdminBaseController
      * @return RedirectResponse|Response
      */
 
-    public function EditUser(User $user, Request $request, EntityManagerInterface $em) :Response
+    public function editUser(User $user, Request $request, EntityManagerInterface $em) :Response
     {
         $form = $this->createForm(EditUserForAdminFromType::class,$user);
         $form->handleRequest($request);
@@ -97,5 +99,52 @@ class AdminUserController extends AdminBaseController
             return $this->redirectToRoute('admin_user');
         }
         return $this->render('admin/user/editUser.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/admin/user/confirm/{id}", name="admin_user_confirm")
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+
+    public function confirmUser(User $user, Request $request, EntityManagerInterface $em) :Response
+    {
+       $thisUser= $em->getRepository(User::class)->find($user);
+       $role = $thisUser ->getRoles();
+       $roleStudent = 'ROLE_STUDENT';
+       $roleAStudent = 'ROLE_ASTUDENT';
+       $roleTeacher = 'ROLE_TEACHER';
+       $roleATeacher= 'ROLE_ATEACHER';
+
+       $notationStudent = in_array($roleStudent,$role,$strict = false);
+       $notationAStudent = in_array($roleAStudent,$role,$strict = false);
+       $notationTeacher = in_array($roleTeacher,$role,$strict = false);
+       $notationATeacher = in_array($roleATeacher,$role,$strict = false);
+
+       //dd($notationStudent,$notationAStudent,$notationTeacher,$notationATeacher);
+
+       if($notationStudent == true or $notationAStudent == true)
+       {
+            $student = New Student();
+            $student->setStudentId($user);
+            $em->persist($student);
+            $em->flush();
+
+           $this->addFlash(self::FLASH_INFO, 'Подтверждена роль студента');
+       }
+
+       elseif($notationTeacher == true or $notationATeacher == true)
+       {
+           $teacher = New Teacher();
+           $teacher->setTeacher($user);
+           $em->persist($teacher);
+           $em->flush();
+
+           $this->addFlash(self::FLASH_INFO, 'Подтверждена роль преподавателя');
+       }
+
+       else  $this->addFlash(self::FLASH_INFO, 'Произошло исключение');
+
+       return $this->redirectToRoute('admin_user');
     }
 }

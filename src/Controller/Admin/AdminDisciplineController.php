@@ -76,7 +76,7 @@ class AdminDisciplineController extends AdminBaseController
      * @return RedirectResponse|Response
      */
 
-    public function EditDiscipline(Discipline $discipline, Request $request, EntityManagerInterface $em) :Response
+    public function editDiscipline(Discipline $discipline, Request $request, EntityManagerInterface $em) :Response
     {
         $form = $this->createForm(DisciplineFromType::class,$discipline);
         $form->handleRequest($request);
