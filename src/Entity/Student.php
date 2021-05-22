@@ -26,7 +26,7 @@ class Student
     private $student;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="students")
+     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="student")
      */
     private $group;
 

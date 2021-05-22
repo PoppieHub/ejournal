@@ -5,9 +5,8 @@ namespace App\Controller\Security;
 use App\Form\ChangePasswordFormType;
 use App\Form\EditPersonalInformationFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Env\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -44,7 +43,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/user/profile/change-personal", name="change_personal")
      */
-    public function ChangePersonalInfo(\Symfony\Component\HttpFoundation\Request $request, EntityManagerInterface $em) :Response
+    public function ChangePersonalInfo(Request $request, EntityManagerInterface $em) :Response
     {
         $user = $this->getUser();
         $form = $this->createForm(EditPersonalInformationFormType::class , $user);
@@ -64,7 +63,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/user/profile/change-password", name="change_password")
      */
-    public function ChangePassword(\Symfony\Component\HttpFoundation\Request $request, EntityManagerInterface $em) :Response
+    public function ChangePassword(Request $request, EntityManagerInterface $em) :Response
     {
         $user = $this->getUser();
         $form = $this->createForm(ChangePasswordFormType::class , $user);

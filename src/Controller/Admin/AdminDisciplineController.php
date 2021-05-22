@@ -39,13 +39,15 @@ class AdminDisciplineController extends AdminBaseController
 
     public function createDiscipline(Request $request, EntityManagerInterface $em)
     {
-        $disciplines = new Discipline();
-        $form = $this->createForm(DisciplineFromType::class, $disciplines);
+        $discipline = new Discipline();
+        $form = $this->createForm(DisciplineFromType::class, $discipline);
         $form->handleRequest($request);
 
         if(($form->isSubmitted()) and ($form->isValid()))
         {
-            $em->persist($disciplines);
+            $string = $form->get('name_discipline')->getData();
+            $discipline->setName_discipline($string);
+            $em->persist($discipline);
             $em->flush();
 
             $this->addFlash(self::FLASH_INFO, 'Дисциплина создана!');
@@ -83,6 +85,9 @@ class AdminDisciplineController extends AdminBaseController
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            $string = $form->get('name_discipline')->getData();
+            $discipline->setName_discipline($string);
+
             $em->persist($discipline);
             $em->flush();
 

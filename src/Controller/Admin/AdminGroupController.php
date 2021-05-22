@@ -45,6 +45,7 @@ class AdminGroupController extends AdminBaseController
 
         if(($form->isSubmitted()) and ($form->isValid()))
         {
+            //dd($groups);
             $em->persist($groups);
             $em->flush();
 

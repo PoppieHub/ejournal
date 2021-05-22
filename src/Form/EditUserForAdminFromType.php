@@ -39,6 +39,7 @@ class EditUserForAdminFromType extends AbstractType
             ->add('middle_name', TextType::class, [
                 'label' => 'Отчество'
             ])
+
         ;
     }
 

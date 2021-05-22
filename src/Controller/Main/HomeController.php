@@ -3,9 +3,9 @@
 
 namespace App\Controller\Main;
 
-use App\Form\EditPersonalInformationFormType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 class HomeController extends BaseController
 {
     /**

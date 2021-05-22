@@ -1,0 +1,22 @@
+{% extends 'admin/adminbase.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row no-gutters justify-content-center">
+            <div class="col-12 col-lg-4 col-md-4">
+                    <h1 class="h3 mb-3 mt-5 font-weight-normal text-center">Изменение данных отметки</h1>
+
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <div class="d-grid gap-2 mx-auto">
+                        <button class="btn btn-primary mt-5" type="submit">
+                            Изменить
+                        </button>
+                    </div>
+                    {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -15,22 +15,38 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('admin_user') }}">
-                                <i class="fas fa-user"></i>
-                               Пользователи
+                            <a class="nav-link" href="#components-collapse" aria-expanded="true" aria-current="true" data-bs-toggle="collapse">
+                                <i class="fas fa-wrench"></i>
+                                Управление
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('admin_group') }}">
-                                <i class="fas fa-users"></i>
-                                Группы
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('admin_discipline') }}">
-                                <i class="fas fa-graduation-cap"></i>
-                                Дисциплины
-                            </a>
+                            <div class="collapse" id="components-collapse">
+                                <ul class="nav flex-column small col-mr-1">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="{{ path('admin_user') }}">
+                                            <i class="fas fa-user"></i>
+                                            Пользователи
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="{{ path('admin_group') }}">
+                                            <i class="fas fa-users"></i>
+                                            Группы
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="{{ path('admin_discipline') }}">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            Дисциплины
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="{{ path('admin_mark') }}">
+                                            <i class="fas fa-book-reader"></i>
+                                            Отметки
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                     </ul>
                 </div>
