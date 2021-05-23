@@ -19,6 +19,30 @@ class StudentRepository extends ServiceEntityRepository
         parent::__construct($registry, Student::class);
     }
 
+    public function deleteStudent($student)
+    {
+        $db = $this->createQueryBuilder('s')
+            ->delete()
+            ->where('s.id = :idS')
+            ->setParameter('idS', $student)
+        ;
+        $query = $db->getQuery();
+        return $query->execute();
+    }
+
+    public function setGroup($group , $student)
+    {
+        $db = $this->createQueryBuilder('s')
+            ->update()
+            ->set('s.group', ':idG')
+            ->setParameter('idG', $group)
+            ->where('s.id = :idS')
+            ->setParameter('idS', $student)
+            ;
+        $query = $db->getQuery();
+        return $query->execute();
+    }
+
     public function findStudent()
     {
         $db = $this->createQueryBuilder('s')

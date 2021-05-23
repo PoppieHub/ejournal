@@ -53,14 +53,14 @@ class Group
     }
 
     /**
-     * @return Collection|Students[]
+     * @return Collection|Student[]
      */
     public function getStudents(): Collection
     {
         return $this->students;
     }
 
-    public function addStudent(Students $student): self
+    public function addStudents(Student $student): self
     {
         if (!$this->students->contains($student)) {
             $this->students[] = $student;
@@ -70,15 +70,4 @@ class Group
         return $this;
     }
 
-    public function removeStudent(Students $student): self
-    {
-        if ($this->students->removeElement($student)) {
-            // set the owning side to null (unless already changed)
-            if ($student->getGroupId() === $this) {
-                $student->setGroupId(null);
-            }
-        }
-
-        return $this;
-    }
 }

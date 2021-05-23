@@ -23,7 +23,9 @@
                     <li class="list-group-item"><b>Имя</b>: {{ user.FirstName }} </li>
                     <li class="list-group-item"><b>Отчество</b>: {{ user.MiddleName }} </li>
                     <li class="list-group-item"><b>Email</b>: {{ user.Email }} </li>
-                    <li class="list-group-item"><b>Группа</b>: </li>
+                    {% if user.student.groupId.groupName is defined  %}
+                    <li class="list-group-item"><b>Группа</b>: {{ user.student.groupId.groupName }} </li>
+                    {% endif %}
                 </ul>
             </div>
 

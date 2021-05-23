@@ -37,7 +37,18 @@
                                 <td>{{ student.last_name }}</td>
                                 <td>{{ student.first_name }}</td>
                                 <td>{{ student.middle_name }}</td>
-                                <td>{{ student.group_name }}</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a href="" class="btn btn dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                                            {{ student.group_name }}
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                            {% for group in groups %}
+                                                <li><a href="{{ path('admin_student_setGroup', {student: student.id, group: group.id}) }}" class="dropdown-item" type="button">{{ group.groupName }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </td>
                                 <td>
                                     <a href="{{ path('admin_student_delete', {id: student.id})}}" type="button" class="btn btn-outline-danger"><i class="far fa-trash-alt"></i></a>
                                 </td>
