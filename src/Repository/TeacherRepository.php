@@ -14,37 +14,39 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TeacherRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Teacher::class);
     }
 
-    // /**
-    //  * @return Teacher[] Returns an array of Teacher objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findDisciplines($id)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $db = $this->createQueryBuilder('t')
+            ->select('t.id as teacherId','tvd.id as disciplineId','tvd.name_discipline','tu.first_name', 'tu.last_name', 'tu.middle_name')
+            ->where('t.id = :idT')
+            ->setParameter('idT', $id)
+            ->join('t.teacher','tu')
+            ->leftJoin('t.visits', 'tv')
+            ->leftJoin('tv.discipline','tvd')
+            ->orderBy('tvd.name_discipline', 'ASC')
+            ->groupBy("tvd.id")
         ;
+        $query = $db->getQuery();
+        return $query->execute();
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Teacher
+    public function deleteTeacher($id)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+        $db = $this->createQueryBuilder('t')
+            ->delete()
+            ->where('t.id = :idT')
+            ->setParameter('idT', $id)
         ;
+        $query = $db->getQuery();
+        return $query->execute();
     }
-    */
+
+
+
 }

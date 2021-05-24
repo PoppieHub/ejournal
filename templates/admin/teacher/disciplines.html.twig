@@ -1,0 +1,67 @@
+{% extends 'admin/baseAdminProfile.html.twig' %}
+
+{% block contentTitle %}
+    <h1>{{ title }} {{ disciplines[0]['last_name'] }} {{ disciplines[0]['first_name'][:1] }}. {{ disciplines[0]['middle_name'][:1] }}.</h1>
+    {% for info in app.flashes('info') %}
+        <div class="alert alert-success alert-dismissible fade show position-relative" role="alert">
+            <strong>{{ info }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row no-gutters">
+            <div class="col-12 mt-2">
+                <div class="dropdown">
+                    <a class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Добавить дисциплину
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        {% for discipline in disciplinesAll %}
+                            <li><a class="dropdown-item" href="{{ path('admin_create_visit', {id: id, disciplineId:discipline.id}) }}">{{ discipline.name_discipline }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if disciplines is not null %}
+    <div class="container-fluid">
+        <div class="row no-gutters">
+            <div class="col-12 mt-4">
+                <h2>Список Дисциплин</h2>
+                {% set count = 0 %}
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Дисциплина</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for discipline in disciplines %}
+                            {% if discipline.disciplineId is not null %}
+                                {% set count = count + 1 %}
+                                <tr>
+                                    <th scope="row">{{ count }}</th>
+                                    <td>{{ discipline.name_discipline }}</td>
+                                    <td>
+                                            <a href="{{ path('admin_teacher_discipline_delete', {id: discipline.teacherId, disciplineId: discipline.disciplineId}) }}" type="button" class="btn btn-outline-danger"><i class="far fa-trash-alt"></i></a>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+
+{% endblock %}

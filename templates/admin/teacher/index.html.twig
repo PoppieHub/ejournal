@@ -1,5 +1,6 @@
 {% extends 'admin/baseAdminProfile.html.twig' %}
 
+
 {% block contentTitle %}
     <h1>{{ title }}</h1>
     {% for info in app.flashes('info') %}
@@ -14,34 +15,30 @@
 
     <div class="container-fluid">
         <div class="row no-gutters">
-            <div class="col-12 mt-2">
-                <a href="{{ path('admin_mark_create') }}" class="btn btn-outline-success">Создать Отметку</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid">
-        <div class="row no-gutters">
             <div class="col-12 mt-4">
-                <h2>Список Отметок</h2>
+                <h2>Список Преподавателей</h2>
                 {% set count = 0 %}
                 <table class="table table-hover">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Отметка</th>
+                        <th scope="col">Фамилия</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Отчество</th>
                         <th scope="col">Действие</th>
                     </tr>
                     </thead>
                     <tbody>
-                        {% for mark in marks %}
+                        {% for teacher in teachers %}
                             {% set count = count + 1 %}
                             <tr>
                                 <th scope="row">{{ count }}</th>
-                                <td>{{mark.operation}}</td>
+                                <td>{{ teacher.teacher.lastName }}</td>
+                                <td>{{ teacher.teacher.firstName }}</td>
+                                <td>{{ teacher.teacher.middleName }}</td>
                                 <td>
-                                    <a href="{{ path('admin_mark_delete', {id: mark.id})}}" type="button" class="btn btn-outline-danger"><i class="far fa-trash-alt"></i></a>
-                                    <a href="{{ path('admin_mark_edit', {id: mark.id})}}" type="button" class="btn btn-outline-dark"><i class="fas fa-user-edit"></i></a>
+                                    <a href="{{ path('admin_teacher_delete', {id: teacher.id})}}" type="button" class="btn btn-outline-danger"><i class="far fa-trash-alt"></i></a>
+                                    <a href="{{ path('admin_teacher_discipline', {id: teacher.id})}}" type="button" class="btn btn-outline-dark"><i class="fas fa-eye"></i></a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -50,5 +47,6 @@
             </div>
         </div>
     </div>
+
 
 {% endblock %}

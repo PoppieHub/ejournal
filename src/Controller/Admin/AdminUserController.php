@@ -89,13 +89,15 @@ class AdminUserController extends AdminBaseController
      * @return RedirectResponse|Response
      */
 
-    public function editUser(User $user, Request $request, EntityManagerInterface $em) :Response
+    public function editUser(User $user, Request $request, EntityManagerInterface $em,UserPasswordEncoderInterface $passwordEncoder) :Response
     {
         $form = $this->createForm(EditUserForAdminFromType::class,$user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($password);
             $em->persist($user);
             $em->flush();
 
