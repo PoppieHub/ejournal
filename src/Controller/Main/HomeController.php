@@ -21,8 +21,22 @@ class HomeController extends BaseController
     public function profile(): Response
     {
         $user = $this->getUser();
-        //dd($user);
-        return $this->render('main/authorized/profile.html.twig', ['user' => $user]);
+        $id = $user->getId();
+        $student = $this->getDoctrine()->getRepository('App:Student')->findOneBy(['student' => $id]);
+        $teacher = $this->getDoctrine()->getRepository('App:Teacher')->findOneBy(['teacher' => $id]);
+
+        return $this->render('main/authorized/profile.html.twig', ['user' => $user, 'student' => $student, 'teacher' => $teacher]);
+    }
+
+    #[Route('/user/baseProfile', name: '_BaseProfile')]
+    public function baseProfile(): Response
+    {
+        $user = $this->getUser();
+        $id = $user->getId();
+        $student = $this->getDoctrine()->getRepository('App:Student')->findOneBy(['student' => $id]);
+        $teacher = $this->getDoctrine()->getRepository('App:Teacher')->findOneBy(['teacher' => $id]);
+
+        return $this->render('main/authorized/baseProfile.html.twig', ['student' => $student, 'teacher' => $teacher]);
     }
 
 }

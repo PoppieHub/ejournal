@@ -94,10 +94,14 @@ class AdminUserController extends AdminBaseController
         $form = $this->createForm(EditUserForAdminFromType::class,$user);
         $form->handleRequest($request);
 
+        //dd($form->isRequired());
+
         if ($form->isSubmitted() && $form->isValid())
         {
-            $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($password);
+            if ($user->getPlainPassword() != null){
+                $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($password);
+            }
             $em->persist($user);
             $em->flush();
 
@@ -120,12 +124,14 @@ class AdminUserController extends AdminBaseController
        $roleStudent = 'ROLE_STUDENT';
        $roleAStudent = 'ROLE_ASTUDENT';
        $roleTeacher = 'ROLE_TEACHER';
-       $roleATeacher= 'ROLE_ATEACHER';
+       $roleATeacher = 'ROLE_ATEACHER';
+       $roleATeacherAndStudent = 'ROLE_ASTUDENT_ATEACHER';
 
        $notationStudent = in_array($roleStudent,$role,$strict = false);
        $notationAStudent = in_array($roleAStudent,$role,$strict = false);
        $notationTeacher = in_array($roleTeacher,$role,$strict = false);
        $notationATeacher = in_array($roleATeacher,$role,$strict = false);
+       $notationATeacherAndStudent = in_array($roleATeacherAndStudent,$role,$strict = false);
 
        //dd($notationStudent,$notationAStudent,$notationTeacher,$notationATeacher);
 
@@ -147,6 +153,21 @@ class AdminUserController extends AdminBaseController
            $em->flush();
 
            $this->addFlash(self::FLASH_INFO, 'Подтверждена роль преподавателя');
+       }
+
+       elseif($notationATeacherAndStudent == true)
+       {
+           $student = New Student();
+           $student->setStudentId($user);
+           $em->persist($student);
+           $em->flush();
+
+           $teacher = New Teacher();
+           $teacher->setTeacher($user);
+           $em->persist($teacher);
+           $em->flush();
+
+           $this->addFlash(self::FLASH_INFO, 'Подтверждена роль студента и преподавателя');
        }
 
        else  $this->addFlash(self::FLASH_INFO, 'Произошло исключение');

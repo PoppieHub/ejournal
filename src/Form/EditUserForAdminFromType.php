@@ -43,6 +43,7 @@ class EditUserForAdminFromType extends AbstractType
             ])
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
+                'required' => false,
                 'first_options' => array(
                     'label' => 'Придумайте пароль',
                 ),
