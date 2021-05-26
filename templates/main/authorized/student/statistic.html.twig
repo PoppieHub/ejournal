@@ -30,9 +30,6 @@
                                     <hr>
                                     <p class="card-text text-center">{{ statistic.operation}}</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            <a href="{{ path('delete_visit', {teacherId :teacherId, disciplineId :disciplineId, studentId :studentId, id :statistic.id}) }}" type="button" class="btn-sm btn-outline-danger"><i class="fas fa-times"></i></a>
-                                        </div>
                                         <small class="text-muted">{{ difference|date }}</small>
                                     </div>
                                 </div>

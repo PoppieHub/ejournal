@@ -1,4 +1,4 @@
-{% extends 'main/authorized/baseProfile.html.twig' %}
+{% extends 'main/authorized/profile.html.twig' %}
 
 {% block title %}Группы{% endblock %}
 
@@ -9,20 +9,26 @@
     <div class="row g-0 feature">
         <div class="card-body">
             <div class="list-group">
+                <h5>Доступные группы:</h5>
                 {% set countA = 0 %}
                 {% for group in groups %}
                     {% set countA = countA + 1 %}
                     <a href="{{ path('list_students', {teacherId: group.teacherId, disciplineId: group.disciplineId, groupId: group.groupId}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countA }}. </b>{{ group.group_name }}</a>
                 {% endfor %}
             </div>
+            <hr>
+            <h5>Остальные группы:</h5>
+            <a href="#group-collapse" type="button" class="btn-sm btn-outline-dark" aria-expanded="true" aria-current="true" data-bs-toggle="collapse"><i class="fas fa-caret-down"></i></a>
         </div>
-        <div class="card-body">
-            <div class="list-group">
-                {% set countB = 0 %}
-                {% for groupAll in groupsAll %}
-                    {% set countB = countB + 1 %}
-                    <a href="{{ path('list_students', {teacherId: teacherId, disciplineId: disciplineId, groupId: groupAll.id}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countB }}. </b>{{ groupAll.groupName }}</a>
-                {% endfor %}
+        <div class="collapse" id="group-collapse">
+            <div class="card-body">
+                <div class="list-group">
+                    {% set countB = 0 %}
+                    {% for groupAll in groupsAll %}
+                        {% set countB = countB + 1 %}
+                        <a href="{{ path('list_students', {teacherId: teacherId, disciplineId: disciplineId, groupId: groupAll.id}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countB }}. </b>{{ groupAll.groupName }}</a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

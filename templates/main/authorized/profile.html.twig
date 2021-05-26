@@ -15,9 +15,9 @@
     <div class="row g-0">
         <div class="col-md-3" style="margin-top: 15px">
             {% if user.image is null %}
-                <img style="width: 100%;" class="img-fluid" src="/public/assets/main/images/avatar-default.svg">
+                <img style="width: 100%;" class="img-fluid rounded" src="/public/assets/main/images/avatar-default.svg">
             {% else %}
-                <img style="width: 100%;" class="img-fluid" src="/public/assets/main/images/user/{{ user.image }}">
+                <img style="width: 100%;" class="img-fluid rounded" src="/public/assets/main/images/user/{{ user.image }}">
             {% endif %}
             <a type="button" class="btn btn-outline-secondary mt-2" data-bs-toggle="modal" data-bs-target="#ChangeModal">
                 Изменить аватар

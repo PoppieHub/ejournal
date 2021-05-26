@@ -7,13 +7,14 @@ use App\Entity\Discipline;
 use App\Entity\Plus;
 use App\Entity\Student;
 use App\Entity\Teacher;
-use App\Entity\User;
 use App\Entity\Visit;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+
 class TeacherController extends BaseController
 {
     /**
@@ -136,15 +137,39 @@ class TeacherController extends BaseController
         $user = $student->getStudentId();
         $discipline = $this->getDoctrine()->getRepository(Discipline::class)->find($disciplineId);
         $statistic = $this->getDoctrine()->getRepository(Visit::class)->findStatisticForTeacher($disciplineId, $studentId);
-        $nowTime =  new \DateTime();
-        //dd($nowTime);
 
         $forRender = parent::renderDefault();
         $forRender['title'] = 'Статистика студента по дисциплине - ';
         $forRender['user'] = $user;
         $forRender['discipline'] = $discipline;
         $forRender['statistics'] = $statistic;
-        $forRender['nowTime '] = $nowTime;
+        $forRender['teacherId'] = $teacherId;
+        $forRender['disciplineId'] = $disciplineId;
+        $forRender['studentId'] = $studentId;
         return $this->render('main/authorized/teacher/statistic.html.twig', $forRender);
+    }
+
+    /**
+     * @Route ("/user/teacher/{teacherId}/discipline/{disciplineId}/student/{studentId}/deleteVisit/{id}", name="delete_visit")
+     * @param $teacherId
+     * @param $disciplineId
+     * @param $studentId
+     * @param $id
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+
+    public function deleteVisit($teacherId, $disciplineId, $studentId, $id, EntityManagerInterface $em):Response
+    {
+        $visit = $em->getRepository(Visit::class)->find($id);
+
+        $em->remove($visit);
+        $em->flush();
+
+        $forRender = parent::renderDefault();
+        $forRender['teacherId'] = $teacherId;
+        $forRender['disciplineId'] = $disciplineId;
+        $forRender['studentId'] = $studentId;
+        return $this->redirectToRoute('teacher_statistic', $forRender);
     }
 }

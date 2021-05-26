@@ -66,12 +66,27 @@ class VisitRepository extends ServiceEntityRepository
     public function findStatisticForTeacher($disciplineId, $studentId)
     {
         $db = $this->createQueryBuilder('v')
-            ->select('vp.operation', 'v.date as dateTime')
+            ->select('vp.operation', 'v.date as dateTime','v.id')
             ->where('v.discipline = :idD', 'v.student = :idS')
             ->setParameter('idD', $disciplineId)
             ->setParameter('idS', $studentId)
             ->leftJoin('v.plus', 'vp')
             ->orderBy('v.date', 'ASC')
+        ;
+        $query = $db->getQuery();
+        return $query->execute();
+    }
+
+    public function findDisciplinesForStudent($id)
+    {
+        $db = $this->createQueryBuilder('v')
+            ->select( 'vd.id as disciplineId','vd.name_discipline', 'vs.id')
+            ->where('vs.id = :idS')
+            ->setParameter('idS', $id)
+            ->leftJoin('v.discipline', 'vd')
+            ->leftJoin('v.student', 'vs')
+            ->groupBy('v.discipline')
+            ->orderBy('vd.name_discipline')
         ;
         $query = $db->getQuery();
         return $query->execute();

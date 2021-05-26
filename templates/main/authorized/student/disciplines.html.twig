@@ -12,7 +12,7 @@
             <div class="list-group">
                 {% for discipline in disciplines %}
                     {% set count = count + 1 %}
-                    <a href="{{ path('list_groups', {teacherId: discipline.id, disciplineId: discipline.disciplineId}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ count }}. </b>{{ discipline.name_discipline }}</a>
+                    <a href="{{ path('student_statistic', { disciplineId: discipline.disciplineId}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ count }}. </b>{{ discipline.name_discipline }}</a>
                 {% endfor %}
             </div>
         </div>
