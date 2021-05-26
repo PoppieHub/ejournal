@@ -1,26 +1,48 @@
 {% extends 'main/authorized/baseProfile.html.twig' %}
 
-{% block title %}Статистика{% endblock %}
+{% block title %}Статистика студента{% endblock %}
 
 {% block contentTitle %}
     <h1>{{ title }}{{ discipline.name_discipline }}</h1>
 {% endblock %}
 {% block content %}
-    <div class="row g-0 feature">
-        <div class="col-md-1" style="margin-top: 15px">
+    <div class="row g-0">
+        <div class="card col-md-2" style="width: 20%">
             {% if user.image is null %}
-                <img style="width: 100%;" class="img-fluid" src="/public/assets/main/images/avatar-default.svg">
+                <img style="width: 100%;" class="card-img-top" src="/public/assets/main/images/avatar-default.svg" alt="Card image">
             {% else %}
-                <img style="width: 100%;" class="img-fluid" src="/public/assets/main/images/user/{{ user.image }}">
+                <img style="width: 100%;" class="card-img-top" src="/public/assets/main/images/user/{{ user.image }}" alt="Card image">
             {% endif %}
-        </div>
-        <div class="col-md-8">
             <div class="card-body">
-                <ul class="list-group">
-                    <li class="list-group-item"><b>ФИО: </b>{{ user.LastName }} {{ user.FirstName }} {{ user.MiddleName }}</li>
-                    <li class="list-group-item"><b>Email</b>: {{ user.Email }} </li>
-                </ul>
+                <h4 class="card-title">{{ user.LastName }} {{ user.FirstName }} {{ user.MiddleName }}</h4>
+                <p class="card-text"><b>Email</b>: {{ user.Email }} </p>
             </div>
+        </div>
+        <div class="col-md-10 py-2 album bg-light">
+            <div class="container">
+                <div class="row">
+                    {% for statistic in statistics %}
+                        {% set diffTime = nowTime - statistic.dateTime %}
+                        <div class="col-md-2">
+                            <div class="card mb-4 shadow-sm">
+                                <div class="card-body">
+                                    <p class="card-text text-center">{{ statistic.operation }}</p>
+                                    <hr>
+                                    <p class="card-text text-center">{{ statistic.dateTime|date("d-m-Y") }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                        </div>
+                                        <small class="text-muted">{{ diffTime }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 

@@ -135,12 +135,16 @@ class TeacherController extends BaseController
         $student = $this->getDoctrine()->getRepository(Student::class)->find($studentId);
         $user = $student->getStudentId();
         $discipline = $this->getDoctrine()->getRepository(Discipline::class)->find($disciplineId);
-        //dd($discipline);
+        $statistic = $this->getDoctrine()->getRepository(Visit::class)->findStatisticForTeacher($disciplineId, $studentId);
+        $nowTime =  new \DateTime();
+        //dd($nowTime);
 
         $forRender = parent::renderDefault();
-        $forRender['title'] = 'Статистика студента по дисциплине ';
+        $forRender['title'] = 'Статистика студента по дисциплине - ';
         $forRender['user'] = $user;
         $forRender['discipline'] = $discipline;
+        $forRender['statistics'] = $statistic;
+        $forRender['nowTime '] = $nowTime;
         return $this->render('main/authorized/teacher/statistic.html.twig', $forRender);
     }
 }
