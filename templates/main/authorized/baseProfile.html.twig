@@ -13,22 +13,18 @@
                                 Профиль
                             </a>
                         </li>
-                        {% if teacher is not null %}
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ path('_profile') }}">
-                                    <i class="fas fa-chalkboard-teacher"></i>
-                                    Дисциплины
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if student is not null %}
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ path('_profile') }}">
-                                    <i class="fas fa-user-graduate"></i>
-                                    Дисциплины
-                                </a>
-                            </li>
-                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('list_disciplines') }}">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                Дисциплины
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{ path('_profile') }}">
+                                <i class="fas fa-user-graduate"></i>
+                                Дисциплины
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>

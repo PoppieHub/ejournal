@@ -1,0 +1,21 @@
+{% extends 'main/authorized/baseProfile.html.twig' %}
+
+{% block title %}Дисциплины{% endblock %}
+
+{% block contentTitle %}
+    <h1>Список дисциплин</h1>
+{% endblock %}
+{% block content %}
+    <div class="row g-0 feature">
+        {% set count = 0 %}
+        <div class="card-body">
+            <div class="list-group">
+                {% for discipline in disciplines %}
+                    {% set count = count + 1 %}
+                    <a href="{{ path('list_groups', {teacherId: discipline.id, disciplineId: discipline.disciplineId}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ count }}. </b>{{ discipline.name_discipline }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

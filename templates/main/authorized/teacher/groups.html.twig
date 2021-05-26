@@ -1,0 +1,30 @@
+{% extends 'main/authorized/baseProfile.html.twig' %}
+
+{% block title %}Группы{% endblock %}
+
+{% block contentTitle %}
+    <h1>Список групп</h1>
+{% endblock %}
+{% block content %}
+    <div class="row g-0 feature">
+        <div class="card-body">
+            <div class="list-group">
+                {% set countA = 0 %}
+                {% for group in groups %}
+                    {% set countA = countA + 1 %}
+                    <a href="{{ path('list_students', {teacherId: group.teacherId, disciplineId: group.disciplineId, groupId: group.groupId}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countA }}. </b>{{ group.group_name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                {% set countB = 0 %}
+                {% for groupAll in groupsAll %}
+                    {% set countB = countB + 1 %}
+                    <a href="{{ path('list_students', {teacherId: teacherId, disciplineId: disciplineId, groupId: groupAll.id}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countB }}. </b>{{ groupAll.groupName }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

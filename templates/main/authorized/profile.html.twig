@@ -5,16 +5,23 @@
 {% block contentTitle %}
     <h1>Профиль пользователя</h1>
     {% for info in app.flashes('info') %}
-    <div class="alert alert-success alert-dismissible fade show position-relative" role="alert">
-        <strong>{{ info }}</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+        <div class="alert alert-success alert-dismissible fade show position-relative" role="alert">
+            <strong>{{ info }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     {% endfor %}
 {% endblock %}
 {% block content %}
     <div class="row g-0">
         <div class="col-md-3" style="margin-top: 15px">
-            <img style="width: 100%;" src="https://www.soundandvision.ee/wp-content/uploads/2019/05/profile-img.jpg" alt="...">
+            {% if user.image is null %}
+                <img style="width: 100%;" class="img-fluid" src="/public/assets/main/images/avatar-default.svg">
+            {% else %}
+                <img style="width: 100%;" class="img-fluid" src="/public/assets/main/images/user/{{ user.image }}">
+            {% endif %}
+            <a type="button" class="btn btn-outline-secondary mt-2" data-bs-toggle="modal" data-bs-target="#ChangeModal">
+                Изменить аватар
+            </a>
         </div>
         <div class="col-md-8">
             <div class="card-body">
@@ -24,7 +31,7 @@
                     <li class="list-group-item"><b>Отчество</b>: {{ user.MiddleName }} </li>
                     <li class="list-group-item"><b>Email</b>: {{ user.Email }} </li>
                     {% if user.student.groupId.groupName is defined  %}
-                    <li class="list-group-item"><b>Группа</b>: {{ user.student.groupId.groupName }} </li>
+                        <li class="list-group-item"><b>Группа</b>: {{ user.student.groupId.groupName }} </li>
                     {% endif %}
                 </ul>
             </div>
@@ -32,6 +39,33 @@
             <div class="card-body">
                 <a href="{{ path('change_personal') }}" type="button" class="btn btn-primary">Изменить данные</a>
                 <a href="{{ path('change_password') }}" type="button" class="btn btn-primary">Изменить пароль</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ChangeModal" tabindex="-1" aria-labelledby="ChangeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ChangeModalLabel">Изменение аватара пользователя</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Загрузите новый аватар</h5>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Выберите фаил и нажмите сохранить</label>
+                        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        <button type="submit" class="btn btn-outline-success mt-2">Сохранить</button>
+                        {{ form_end(form) }}
+                    </div>
+                    {% if user.image is not null %}
+                        <hr>
+                        <h5>Удалить текущий аватар пользователя</h5>
+                        <a href="{{ path('delete_image', {id: user.id})}}" type="button" class="btn btn-outline-danger mt-2">Удалить</a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

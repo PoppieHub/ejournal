@@ -52,8 +52,9 @@ class User implements UserInterface
     private $middle_name;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="string", length=500, nullable=true)
      */
+    private $image;
 
     /**
      * @ORM\Column(type="boolean")
@@ -164,6 +165,18 @@ class User implements UserInterface
     public function setMiddleName(?string $middle_name): self
     {
         $this->middle_name = $middle_name;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
