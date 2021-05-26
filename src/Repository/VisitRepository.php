@@ -57,27 +57,10 @@ class VisitRepository extends ServiceEntityRepository
             ->leftJoin('v.teacher', 'vt')
             ->leftJoin('v.student', 'vs')
             ->leftJoin('vs.group', 'vsg')
+            ->groupBy('vsg.id')
         ;
         $query = $db->getQuery();
         return $query->execute();
     }
 
-    public function findStudentsFromGroupForTeacher($disciplineId, $groupId)
-    {
-        $db = $this->createQueryBuilder('v')
-            ->select('vsg.group_name', 'vd.name_discipline', 'vsu.first_name', 'vsu.middle_name', 'vsu.last_name', 'vs.id as studentId')
-            ->where('vs.group = :idG')
-            ->setParameter('idG', $groupId)
-            ->setParameter('idD', $disciplineId)
-            ->leftJoin('v.student', 'vs')
-            ->leftJoin('vs.group', 'vsg')
-            ->leftJoin('vs.student', 'vsu')
-            ->leftJoin('v.discipline', 'vd')
-            ->addSelect('SUM(CASE WHEN v.discipline = :idD then 1 else 0 end) as count',' SUM(CASE WHEN v.discipline = :idD and v.plus = 2 then 1 else 0 end) as countMiss')
-            ->orderBy('vsu.last_name', 'ASC')
-            ->groupBy('vs.id')
-        ;
-        $query = $db->getQuery();
-        return $query->execute();
-    }
 }

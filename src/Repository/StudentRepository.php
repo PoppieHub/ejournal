@@ -56,32 +56,22 @@ class StudentRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
-    // /**
-    //  * @return Student[] Returns an array of Student objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findStudentsFromGroupForTeacher($disciplineId, $groupId)
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $db = $this->createQueryBuilder('s')
+            ->select( 'su.first_name', 'su.middle_name', 'su.last_name', 's.id as studentId')
+            ->where('s.group = :idG')
+            ->setParameter('idG', $groupId)
+            ->setParameter('idD', $disciplineId)
+            ->leftJoin('s.visits', 'sv')
+            ->leftJoin('s.group', 'sg')
+            ->leftJoin('s.student', 'su')
+            ->leftJoin('sv.discipline', 'svd')
+            ->addSelect('SUM(CASE WHEN sv.discipline = :idD then 1 else 0 end) as count',' SUM(CASE WHEN sv.discipline = :idD and sv.plus = 2 then 1 else 0 end) as countMiss')
+            ->orderBy('su.last_name', 'ASC')
+            ->groupBy('s.id')
         ;
+        $query = $db->getQuery();
+        return $query->execute();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Student
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

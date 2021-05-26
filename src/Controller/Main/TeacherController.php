@@ -3,6 +3,11 @@
 
 namespace App\Controller\Main;
 
+use App\Entity\Discipline;
+use App\Entity\Plus;
+use App\Entity\Student;
+use App\Entity\Teacher;
+use App\Entity\Visit;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -62,12 +67,56 @@ class TeacherController extends BaseController
 
     public function listStudents($teacherId, $disciplineId, $groupId, EntityManagerInterface $em):Response
     {
-        $students = $em->getRepository('App:Visit')->findStudentsFromGroupForTeacher($disciplineId, $groupId);
+        $students = $em->getRepository('App:Student')->findStudentsFromGroupForTeacher($disciplineId, $groupId);
+        $group = $em->getRepository('App:Group')->find($groupId);
+        $discipline = $em->getRepository('App:Discipline')->find($disciplineId);
 
         $forRender = parent::renderDefault();
         $forRender['teacherId'] = $teacherId;
         $forRender['disciplineId'] = $disciplineId;
         $forRender['students'] = $students;
+        $forRender['group'] = $group;
+        $forRender['discipline'] = $discipline;
+        $forRender['title'] = 'Группа - ';
         return $this->render('main/authorized/teacher/students.html.twig', $forRender);
+    }
+
+    /**
+     * @Route ("/user/teacher/{teacherId}/discipline/{disciplineId}/group/{groupId}/student/{studentId}/plus/{plus}/", name="add_visit")
+     * @param $teacherId
+     * @param $disciplineId
+     * @param $groupId
+     * @param $studentId
+     * @param $plus
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+
+    public function addVisit($teacherId, $disciplineId, $groupId, $studentId, $plus, EntityManagerInterface $em):Response
+    {
+        $teacher = $this->getDoctrine()->getRepository(Teacher::class)->find($teacherId);
+        $discipline = $this->getDoctrine()->getRepository(Discipline::class)->find($disciplineId);
+        $student =  $this->getDoctrine()->getRepository(Student::class)->find($studentId);
+        $plus = $this->getDoctrine()->getRepository(Plus::class)->findOneBy(['operation' => $plus]);
+
+        $today = new \DateTime();
+        $today->format('Y-m-d');
+
+        $visit = New Visit();
+        $visit->setTeacher($teacher);
+        $visit->setDiscipline($discipline);
+        $visit->setStudent($student);
+        $visit->setPlus($plus);
+        $visit->setDate($today);
+
+        $em->persist($visit);
+        $em->flush();
+
+        $forRender = parent::renderDefault();
+        $forRender['teacherId'] = $teacherId;
+        $forRender['disciplineId'] = $disciplineId;
+        $forRender['groupId'] = $groupId;
+        $forRender['title'] = 'Группа - ';
+        return $this->redirectToRoute('list_students',$forRender);
     }
 }
