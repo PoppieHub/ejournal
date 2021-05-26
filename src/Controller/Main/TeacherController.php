@@ -7,6 +7,7 @@ use App\Entity\Discipline;
 use App\Entity\Plus;
 use App\Entity\Student;
 use App\Entity\Teacher;
+use App\Entity\User;
 use App\Entity\Visit;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -118,5 +119,28 @@ class TeacherController extends BaseController
         $forRender['groupId'] = $groupId;
         $forRender['title'] = 'Группа - ';
         return $this->redirectToRoute('list_students',$forRender);
+    }
+
+    /**
+     * @Route ("/user/teacher/{teacherId}/discipline/{disciplineId}/student/{studentId}/", name="teacher_statistic")
+     * @param $teacherId
+     * @param $disciplineId
+     * @param $studentId
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+
+    public function statistic($teacherId, $disciplineId, $studentId, EntityManagerInterface $em):Response
+    {
+        $student = $this->getDoctrine()->getRepository(Student::class)->find($studentId);
+        $user = $student->getStudentId();
+        $discipline = $this->getDoctrine()->getRepository(Discipline::class)->find($disciplineId);
+        //dd($discipline);
+
+        $forRender = parent::renderDefault();
+        $forRender['title'] = 'Статистика студента по дисциплине ';
+        $forRender['user'] = $user;
+        $forRender['discipline'] = $discipline;
+        return $this->render('main/authorized/teacher/statistic.html.twig', $forRender);
     }
 }
