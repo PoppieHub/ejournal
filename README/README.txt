@@ -1,5 +1,5 @@
 USE: 
-	* PHP 8.0.1
+	* PHP - 8.0.1
 	* MYSQL - 8.0
 
 FOR PROPER WORK, USE COMMANDS FROM: 
