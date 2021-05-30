@@ -13,19 +13,22 @@
                                 Профиль
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('list_disciplines') }}">
-                                <i class="fas fa-chalkboard-teacher"></i>
-                                Дисциплины
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ path('list_disciplines_student') }}">
-                                <i class="fas fa-user-graduate"></i>
-                                Дисциплины
-                            </a>
-                        </li>
+                        {% if app.session.get('teacherAccess') == true %}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{{ path('list_disciplines') }}">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                    Дисциплины
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if app.session.get('studentAccess') == true %}
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{{ path('list_disciplines_student') }}">
+                                    <i class="fas fa-user-graduate"></i>
+                                    Дисциплины
+                                </a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </nav>

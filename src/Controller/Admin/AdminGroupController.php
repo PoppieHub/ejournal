@@ -4,6 +4,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Group;
+use App\Entity\Visit;
 use App\Form\CreateGroupFromType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -69,8 +70,18 @@ class AdminGroupController extends AdminBaseController
 
     public function deleteGroup(Group $group, EntityManagerInterface $em):Response
     {
+        $students = $em->getRepository('App:Student')->findBy(['group' => $group->getId()]);
+
+        foreach ($students as &$student){
+            $em->getRepository(Visit::class)->deleteStudentVisit($student);
+            $student->setGroupId(null);
+            $em->persist($student);
+            $em->flush();
+        }
         $em->remove($group);
         $em->flush();
+
+        $this->addFlash(self::FLASH_INFO, 'Группа удалена и студенты исключены из нее');
         return $this->redirectToRoute('admin_group');
     }
 

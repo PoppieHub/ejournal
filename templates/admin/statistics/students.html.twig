@@ -1,0 +1,69 @@
+{% extends 'admin/baseAdminProfile.html.twig' %}
+
+{% block title %}{{ group.groupName }}{% endblock %}
+
+{% block contentTitle %}
+    <h1>{{ title }} - {{ group.groupName }}</h1>
+{% endblock %}
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row no-gutters">
+            <div class="col-12 mt-4">
+                {% set count = 0 %}
+                <table class="table table-hover text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Студент</th>
+                        <th scope="col">Общее колличество пар</th>
+                        <th scope="col">Пропущено</th>
+                        <th scope="col">Процент посещаемости</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for listStudent in listStudents %}
+                        {% set count = count + 1 %}
+                        <tr>
+                            <th scope="row">{{ count }}</th>
+                            <td>{{ listStudent.last_name }} {{ listStudent.first_name[:1] }}. {{ listStudent.middle_name[:1] }}.</td>
+                            <td><b>{{ listStudent.count }}</b></td>
+                            <td>
+                                {% if listStudent.countMiss == 0 %}
+                                    <b class="text-success">{{ listStudent.countMiss }}</b>
+                                {% else %}
+                                    <b class="text-danger">{{ listStudent.countMiss }}</b>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if listStudent.count == listStudent.countMiss %}
+                                    {% set countP = '0' %}
+                                    <b class="text-danger">{{ countP }}%</b>
+                                {% elseif listStudent.countMiss == 0 %}
+                                    {% set countP = '100' %}
+                                    <b class="text-success">{{ countP }}%</b>
+                                {% else %}
+                                    {% set countP = (100 - listStudent.countMiss/listStudent.count * 100)|round(1, 'floor') %}
+                                    {% if countP > 59 %}
+                                        <b class="text-success">{{ countP }}%</b>
+                                    {% else %}
+                                        <b class="text-danger">{{ countP }}%</b>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if listStudent.count >= 1 %}
+                                    <a href="{{ path('admin_student_statistics', {id: group.id, studentId: listStudent.studentId }) }}" type="button" class="btn btn-outline-dark"><i class="fas fa-eye"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+

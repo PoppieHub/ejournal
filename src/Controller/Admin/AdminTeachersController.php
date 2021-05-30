@@ -46,8 +46,13 @@ class AdminTeachersController extends AdminBaseController
 
     public function deleteTeacher($id, EntityManagerInterface $em):Response
     {
-        $em->getRepository('App:Teacher')->deleteTeacher($id);
-
+        if ($em->getRepository('App:Visit')->findBy(['teacher' => $id])){
+            $this->addFlash(self::FLASH_INFO, 'Исключите из всех дисциплин преподавателя!');
+        }
+        else{
+            $em->getRepository('App:Teacher')->deleteTeacher($id);
+            $this->addFlash(self::FLASH_INFO, 'Роль преподавателя удалена!');
+        }
         return $this->redirectToRoute('admin_teachers');
     }
 

@@ -35,7 +35,21 @@
                         {% if is_granted('ROLE_ADMIN') %}
                             <a href="{{ path('admin_home') }}" class="navbar-brand btn btn-outline" type="submit"><i class="fas fa-user-astronaut"></i></a>
                         {% endif %}
-                        <a href="{{ path('_profile') }}" class="navbar-brand btn btn-outline" type="submit"><i class="fas fa-cog"></i></a>
+                        <a href="{{ path('_profile') }}" class="navbar-brand btn btn-outline" type="submit">
+                            {% if app.session.get('user').image is null %}
+                                <img style="width: 30px;" class="rounded-circle" src="/public/assets/main/images/avatar-default.svg">
+                            {% else %}
+                                <img style="
+                                           position: absolute;
+                                           top:50%;
+                                           left:50%;
+                                           transform:translate(-50%,-50%);
+                                           width:30px;
+                                           height:30px;
+                                           object-fit:cover;
+                                        "class="rounded-circle" src="/public/assets/main/images/user/{{ app.session.get('user').image }}">
+                            {% endif %}
+                        </a>
                         <a href="{{ path('app_logout') }}" class="navbar-brand btn btn-outline" type="submit"><i class="fas fa-sign-out-alt"></i></a>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="navbar-brand btn btn-outline" type="submit"><i class="fas fa-sign-in-alt"></i></a>

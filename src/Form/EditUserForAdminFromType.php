@@ -29,7 +29,6 @@ class EditUserForAdminFromType extends AbstractType
                     'Преподаватель' => "ROLE_TEACHER",
                     'Админ-Студент' => "ROLE_ASTUDENT",
                     'Админ-Преподаватель' => "ROLE_ATEACHER",
-                    'Админ-Студент-Преподаватель' => "ROLE_ASTUDENT_ATEACHER",
                 ],
             ))
             ->add('first_name', TextType::class, [

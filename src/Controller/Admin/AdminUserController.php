@@ -21,12 +21,12 @@ class AdminUserController extends AdminBaseController
 
     /**
      * @Route("/admin/user", name="admin_user")
+     * @param EntityManagerInterface $em
      * @return Response
      */
 
-    public function index()
+    public function index(EntityManagerInterface $em): Response
     {
-        //$users = $this->getDoctrine()->getRepository(User::class)->findAll();
         $users = $this->getDoctrine()->getRepository(User::class)->findBy(
             array(),
             array('id' => 'DESC')
@@ -46,7 +46,7 @@ class AdminUserController extends AdminBaseController
      * @return RedirectResponse|Response
      */
 
-    public function createUser(Request $request,UserPasswordEncoderInterface $passwordEncoder)
+    public function createUser(Request $request,UserPasswordEncoderInterface $passwordEncoder): RedirectResponse|Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class,$user);
@@ -78,8 +78,14 @@ class AdminUserController extends AdminBaseController
 
     public function deleteUser(User $user, EntityManagerInterface $em):Response
     {
-        $em->remove($user);
-        $em->flush();
+        if($user->getTeacher() != null or $user->getStudent() != null){
+            $this->addFlash(self::FLASH_INFO, 'Исключите из студентов или преподавателей!');
+        }
+        else{
+            $em->remove($user);
+            $em->flush();
+            $this->addFlash(self::FLASH_INFO, 'Пользователь удален!');
+        }
         return $this->redirectToRoute('admin_user');
     }
 
@@ -119,56 +125,49 @@ class AdminUserController extends AdminBaseController
 
     public function confirmUser(User $user, Request $request, EntityManagerInterface $em) :Response
     {
-       $thisUser= $em->getRepository(User::class)->find($user);
+       $thisUser = $em->getRepository(User::class)->find($user);
        $role = $thisUser ->getRoles();
        $roleStudent = 'ROLE_STUDENT';
        $roleAStudent = 'ROLE_ASTUDENT';
        $roleTeacher = 'ROLE_TEACHER';
        $roleATeacher = 'ROLE_ATEACHER';
-       $roleATeacherAndStudent = 'ROLE_ASTUDENT_ATEACHER';
 
        $notationStudent = in_array($roleStudent,$role,$strict = false);
        $notationAStudent = in_array($roleAStudent,$role,$strict = false);
        $notationTeacher = in_array($roleTeacher,$role,$strict = false);
        $notationATeacher = in_array($roleATeacher,$role,$strict = false);
-       $notationATeacherAndStudent = in_array($roleATeacherAndStudent,$role,$strict = false);
 
        //dd($notationStudent,$notationAStudent,$notationTeacher,$notationATeacher);
 
-       if($notationStudent == true or $notationAStudent == true)
-       {
-            $student = New Student();
-            $student->setStudentId($user);
-            $em->persist($student);
-            $em->flush();
+       if($notationStudent == true or $notationAStudent == true){
+           if ($em->getRepository(Student::class)->findBy(['student' => $user->getId()])){
+               $this->addFlash(self::FLASH_INFO, 'Роль студента уже была подтверждена');
+           }
+           else {
+               $student = New Student();
+               $student->setStudentId($user);
+               $em->persist($student);
+               $em->flush();
 
-           $this->addFlash(self::FLASH_INFO, 'Подтверждена роль студента');
+               $this->addFlash(self::FLASH_INFO, 'Подтверждена роль студента');
+           }
        }
 
        elseif($notationTeacher == true or $notationATeacher == true)
        {
-           $teacher = New Teacher();
-           $teacher->setTeacher($user);
-           $em->persist($teacher);
-           $em->flush();
+           if ($em->getRepository(Teacher::class)->findBy(['teacher' => $user->getId()])){
+               $this->addFlash(self::FLASH_INFO, 'Роль преподавателя уже была подтверждена');
+           }
+           else{
+               $teacher = New Teacher();
+               $teacher->setTeacher($user);
+               $em->persist($teacher);
+               $em->flush();
 
-           $this->addFlash(self::FLASH_INFO, 'Подтверждена роль преподавателя');
+               $this->addFlash(self::FLASH_INFO, 'Подтверждена роль преподавателя');
+           }
        }
 
-       elseif($notationATeacherAndStudent == true)
-       {
-           $student = New Student();
-           $student->setStudentId($user);
-           $em->persist($student);
-           $em->flush();
-
-           $teacher = New Teacher();
-           $teacher->setTeacher($user);
-           $em->persist($teacher);
-           $em->flush();
-
-           $this->addFlash(self::FLASH_INFO, 'Подтверждена роль студента и преподавателя');
-       }
 
        else  $this->addFlash(self::FLASH_INFO, 'Произошло исключение');
 

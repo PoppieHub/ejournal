@@ -13,7 +13,7 @@
                 {% set countA = 0 %}
                 {% for group in groups %}
                     {% set countA = countA + 1 %}
-                    <a href="{{ path('list_students', {teacherId: group.teacherId, disciplineId: group.disciplineId, groupId: group.groupId}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countA }}. </b>{{ group.group_name }}</a>
+                    <a href="{{ path('list_students', {disciplineId: group.disciplineId, groupId: group.groupId}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countA }}. </b>{{ group.group_name }}</a>
                 {% endfor %}
             </div>
             <hr>
@@ -26,7 +26,7 @@
                     {% set countB = 0 %}
                     {% for groupAll in groupsAll %}
                         {% set countB = countB + 1 %}
-                        <a href="{{ path('list_students', {teacherId: teacherId, disciplineId: disciplineId, groupId: groupAll.id}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countB }}. </b>{{ groupAll.groupName }}</a>
+                        <a href="{{ path('list_students', {disciplineId: disciplineId, groupId: groupAll.id}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countB }}. </b>{{ groupAll.groupName }}</a>
                     {% endfor %}
                 </div>
             </div>

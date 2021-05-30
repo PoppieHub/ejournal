@@ -4,6 +4,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Student;
+use App\Entity\Visit;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,12 +43,13 @@ class AdminStudentsController extends AdminBaseController
 
     public function deleteStudent($id, EntityManagerInterface $em):Response
     {
-        //dd($id);
+        $student = $em->getRepository(Student::class)->find($id);
+        $student->setGroupId(null);
+        $em->getRepository(Visit::class)->deleteStudentVisit($student->getId());
+        $em->persist($student);
+        $em->flush();
         $em->getRepository('App:Student')->deleteStudent($id);
-
-        //$query = $em->getRepository('App:Student')->find($id);
-        //$em->remove($query);
-        //$em->flush();
+        $this->addFlash(self::FLASH_INFO, 'Роль студента удалена!');
         return $this->redirectToRoute('admin_students');
     }
 

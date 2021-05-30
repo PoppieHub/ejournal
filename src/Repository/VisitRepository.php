@@ -71,7 +71,7 @@ class VisitRepository extends ServiceEntityRepository
             ->setParameter('idD', $disciplineId)
             ->setParameter('idS', $studentId)
             ->leftJoin('v.plus', 'vp')
-            ->orderBy('v.date', 'ASC')
+            ->orderBy('v.date', 'DESC')
         ;
         $query = $db->getQuery();
         return $query->execute();
@@ -87,6 +87,66 @@ class VisitRepository extends ServiceEntityRepository
             ->leftJoin('v.student', 'vs')
             ->groupBy('v.discipline')
             ->orderBy('vd.name_discipline')
+        ;
+        $query = $db->getQuery();
+        return $query->execute();
+    }
+
+    public function deleteStudentVisit($id)
+    {
+        $db = $this->createQueryBuilder('v')
+            ->delete()
+            ->where('v.student = :idS')
+            ->setParameter('idS', $id)
+        ;
+        $query = $db->getQuery();
+        return $query->execute();
+    }
+
+    public function deleteDisciplineVisit($id)
+    {
+        $db = $this->createQueryBuilder('v')
+            ->delete()
+            ->where('v.discipline = :idD')
+            ->setParameter('idD', $id)
+        ;
+        $query = $db->getQuery();
+        return $query->execute();
+    }
+
+    public function deleteMarkVisit($id)
+    {
+        $db = $this->createQueryBuilder('v')
+            ->delete()
+            ->where('v.plus = :idP')
+            ->setParameter('idP', $id)
+        ;
+        $query = $db->getQuery();
+        return $query->execute();
+    }
+
+    public function findGroupAndVisit()
+    {
+        $db = $this->createQueryBuilder('v')
+            ->select('vsg.id','vsg.group_name','SUM(CASE WHEN v.plus = 1 or v.plus = 2 then 1 else 0 end) as count','SUM(CASE WHEN v.plus = 2 then 1 else 0 end) as countMiss')
+            ->leftJoin('v.student', 'vs')
+            ->leftJoin('vs.group','vsg')
+            ->groupBy('vsg.id')
+            ->orderBy('vsg.group_name', 'ASC')
+        ;
+        $query = $db->getQuery();
+        return $query->execute();
+    }
+
+    public function findStatistic($studentId)
+    {
+        $db = $this->createQueryBuilder('v')
+            ->select('vp.operation', 'v.date as dateTime','v.id','vd.name_discipline')
+            ->where( 'v.student = :idS')
+            ->setParameter('idS', $studentId)
+            ->leftJoin('v.plus', 'vp')
+            ->leftJoin('v.discipline', 'vd')
+            ->orderBy('v.date', 'DESC')
         ;
         $query = $db->getQuery();
         return $query->execute();

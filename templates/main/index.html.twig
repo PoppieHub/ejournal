@@ -7,10 +7,121 @@
         <div class="row no-gutters justify-content-center mt-4">
             <div class="col-12 col-lg-6 col-md-2">
                 <h1 class="display-5 text-center mt-2">
-                    {{ title }}
+                    Проект {{ title }}
                 </h1>
+                <p class="display-6 text-center mt-2">Это электронный журнал. Реализованный на php framework symfony.</p>
+            </div>
+            <div class="col-12 col-lg-10 col-md-4 text-center">
+                <div class="btn-group" role="group">
+                    <a type="button"  class="btn btn mt-2" href="https://github.com/PoppieHub/ejournal"><i class="fab fa-github" style="font-size: 80px"></i><p class="display-6 text-center mt-2">Актуальные версии</p></a>
+                </div>
+                <div class="btn-group" role="group">
+                    <a type="button"  class="btn btn mt-2" href="https://t.me/Kndrey"><i class="fab fa-telegram text-info" style="font-size: 80px"></i><p class="display-6 text-center mt-2">По вопросам</p></a>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12 text-center" style="position: absolute;bottom: 30px;left: 0;">
+            <div class="l-section-top">
+                <canvas width="1000" height="500" id="game" ></canvas>
+                <script>
+                    var canvas = document.getElementById('game');
+                    var context = canvas.getContext('2d');
+                    var grid = 16;
+                    var count = 0;
+                    var eat = 0
+                    var snake = {
+                        x: 160,
+                        y: 160,
+                        dx: grid,
+                        dy: 0,
+                        cells: [],
+                        maxCells: 4
+                    };
+                    var apple = {
+                        x: 320,
+                        y: 320
+                    };
+                    function getRandomInt(min, max) {
+                        return Math.floor(Math.random() * (max - min)) + min;
+                    }
+                    function loop() {
+                        requestAnimationFrame(loop);
+                        if (++count < 4) {
+                            return;
+                        }
+                        count = 0;
+                        eat = 0;
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        snake.x += snake.dx;
+                        snake.y += snake.dy;
+                        if (snake.x < 0) {
+                            snake.x = canvas.width - grid;
+                        }
+                        else if (snake.x >= canvas.width) {
+                            snake.x = 0;
+                        }
+                        if (snake.y < 0) {
+                            snake.y = canvas.height - grid;
+                        }
+                        else if (snake.y >= canvas.height) {
+                            snake.y = 0;
+                        }
+                        snake.cells.unshift({ x: snake.x, y: snake.y });
+                        if (snake.cells.length > snake.maxCells) {
+                            snake.cells.pop();
+                        }
+                        context.fillStyle = '#0dcaf0';
+                        context.fillRect(apple.x, apple.y, grid - 1, grid - 1);
+                        context.fillStyle = '#212529';
+                        snake.cells.forEach(function (cell, index) {
+                            context.fillRect(cell.x, cell.y, grid - 1, grid - 1);
+                            if (cell.x === apple.x && cell.y === apple.y) {
+                                snake.maxCells++;
+                                eat++; console.log('eat: ', eat);
+                                apple.x = getRandomInt(0, 25) * grid;
+                                apple.y = getRandomInt(0, 25) * grid;
+                            }
+                            for (var i = index + 1; i < snake.cells.length; i++) {
+                                if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+                                    snake.x = 160;
+                                    snake.y = 160;
+                                    snake.cells = [];
+                                    snake.maxCells = 4;
+                                    snake.dx = grid;
+                                    snake.dy = 0;
+                                    apple.x = getRandomInt(0, 25) * grid;
+                                    apple.y = getRandomInt(0, 25) * grid;
+                                }
+                            }
+                        });
+                    }
+                    document.addEventListener('keydown', function (e) {
+                        if (e.which === 37 && snake.dx === 0) {
+                            snake.dx = -grid;
+                            snake.dy = 0;
+                        }
+                        else if (e.which === 38 && snake.dy === 0) {
+                            snake.dy = -grid;
+                            snake.dx = 0;
+                        }
+                        else if (e.which === 39 && snake.dx === 0) {
+                            snake.dx = grid;
+                            snake.dy = 0;
+                        }
+                        else if (e.which === 40 && snake.dy === 0) {
+                            snake.dy = grid;
+                            snake.dx = 0;
+                        }
+                    });
+                    requestAnimationFrame(loop);
+                </script>
+            </div>
+        </div>
+    </div>
+
+
 
 {% endblock %}

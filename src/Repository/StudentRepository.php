@@ -74,4 +74,21 @@ class StudentRepository extends ServiceEntityRepository
         $query = $db->getQuery();
         return $query->execute();
     }
+
+    public function findStudentsFromGroup($groupId)
+    {
+        $db = $this->createQueryBuilder('s')
+            ->select( 'su.first_name', 'su.middle_name', 'su.last_name', 's.id as studentId')
+            ->where('s.group = :idG')
+            ->setParameter('idG', $groupId)
+            ->leftJoin('s.visits', 'sv')
+            ->leftJoin('s.group', 'sg')
+            ->leftJoin('s.student', 'su')
+            ->addSelect('SUM(CASE WHEN sv.plus = 1 or sv.plus = 2 then 1 else 0 end) as count','SUM(CASE WHEN sv.plus = 2 then 1 else 0 end) as countMiss')
+            ->orderBy('su.last_name', 'ASC')
+            ->groupBy('s.id')
+        ;
+        $query = $db->getQuery();
+        return $query->execute();
+    }
 }

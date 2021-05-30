@@ -4,6 +4,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Discipline;
+use App\Entity\Visit;
 use App\Form\DisciplineFromType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -70,8 +71,10 @@ class AdminDisciplineController extends AdminBaseController
 
     public function deleteDiscipline(Discipline $discipline, EntityManagerInterface $em):Response
     {
+        $em->getRepository(Visit::class)->deleteDisciplineVisit($discipline->getId());
         $em->remove($discipline);
         $em->flush();
+        $this->addFlash(self::FLASH_INFO, 'Дисциплина удалена!');
         return $this->redirectToRoute('admin_discipline');
     }
 

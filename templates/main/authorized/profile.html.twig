@@ -63,7 +63,7 @@
                     {% if user.image is not null %}
                         <hr>
                         <h5>Удалить текущий аватар пользователя</h5>
-                        <a href="{{ path('delete_image', {id: user.id})}}" type="button" class="btn btn-outline-danger mt-2">Удалить</a>
+                        <a href="{{ path('delete_image')}}" type="button" class="btn btn-outline-danger mt-2">Удалить</a>
                     {% endif %}
                 </div>
             </div>

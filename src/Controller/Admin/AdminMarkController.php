@@ -4,6 +4,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Plus;
+use App\Entity\Visit;
 use App\Form\MarkFromType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -71,8 +72,10 @@ class AdminMarkController extends AdminBaseController
 
     public function deleteMark(Plus $mark, EntityManagerInterface $em):Response
     {
+        $em->getRepository(Visit::class)->deleteMarkVisit($mark->getId());
         $em->remove($mark);
         $em->flush();
+        $this->addFlash(self::FLASH_INFO, 'Отметка и записи с ней удалены!');
         return $this->redirectToRoute('admin_mark');
     }
 

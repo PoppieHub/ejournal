@@ -10,8 +10,9 @@ class BaseController extends AbstractController
 {
     public function renderDefault()
     {
+
         return [
-            'title' => 'Сайт EJournal'
+            'title' => 'EJournal'
         ];
 
     }

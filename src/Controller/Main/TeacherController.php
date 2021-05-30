@@ -12,63 +12,58 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-class TeacherController extends BaseController
+class TeacherController extends HomeController
 {
     /**
      * @Route ("/user/teacher/", name="list_disciplines")
-     * @param Request $request
-     * @return RedirectResponse|Response
      */
-
-    public function listDisciplines(EntityManagerInterface $em):Response
+    public function listDisciplines(EntityManagerInterface $em, Session $session):Response
     {
-        $user = $this->getUser()->getId();
-        $teacher = $em->getRepository('App:Teacher')->findOneBy(['teacher' => $user]);
-        $id = $teacher->getId();
-        $disciplines =  $em->getRepository('App:Visit')->findDisciplinesForTeacher($id);
+        $teacherId = $session->get('user')->getTeacher()->getId();
+        $session->set('teacherId',$teacherId);
+        $disciplines =  $em->getRepository('App:Visit')->findDisciplinesForTeacher($teacherId);
 
         $forRender = parent::renderDefault();
         $forRender['disciplines'] = $disciplines;
-
         return $this->render('main/authorized/teacher/disciplines.html.twig', $forRender);
     }
 
     /**
-     * @Route ("/user/teacher/{teacherId}/discipline/{disciplineId}", name="list_groups")
-     * @param $teacherId
+     * @Route ("/user/teacher/discipline/{disciplineId}", name="list_groups")
      * @param $disciplineId
-     * @param Request $request
-     * @return RedirectResponse|Response
+     * @return Response
      */
 
-    public function listGroups($teacherId,$disciplineId,EntityManagerInterface $em):Response
+    public function listGroups($disciplineId, EntityManagerInterface $em,Session $session): Response
     {
+        $teacherId = $session->get('teacherId');
         $groupsAll = $em->getRepository('App:Group')->findAll();
         $groups = $em->getRepository('App:Visit')->findGroupsForTeacher($teacherId,$disciplineId);
 
         $forRender = parent::renderDefault();
         $forRender['groups'] = $groups;
         $forRender['groupsAll'] = $groupsAll;
-        $forRender['teacherId'] = $teacherId;
         $forRender['disciplineId'] = $disciplineId;
 
         return $this->render('main/authorized/teacher/groups.html.twig', $forRender);
     }
 
     /**
-     * @Route ("/user/teacher/{teacherId}/discipline/{disciplineId}/group/{groupId}", name="list_students")
-     * @param $teacherId
+     * @Route ("/user/teacher/discipline/{disciplineId}/group/{groupId}", name="list_students")
      * @param $disciplineId
      * @param $groupId
-     * @param Request $request
-     * @return RedirectResponse|Response
+     * @param EntityManagerInterface $em
+     * @param Session $session
+     * @return Response
      */
 
-    public function listStudents($teacherId, $disciplineId, $groupId, EntityManagerInterface $em):Response
+    public function listStudents($disciplineId, $groupId, EntityManagerInterface $em, Session $session):Response
     {
+        $teacherId = $session->get('teacherId');
         $students = $em->getRepository('App:Student')->findStudentsFromGroupForTeacher($disciplineId, $groupId);
         $group = $em->getRepository('App:Group')->find($groupId);
         $discipline = $em->getRepository('App:Discipline')->find($disciplineId);
@@ -84,18 +79,19 @@ class TeacherController extends BaseController
     }
 
     /**
-     * @Route ("/user/teacher/{teacherId}/discipline/{disciplineId}/group/{groupId}/student/{studentId}/plus/{plus}/", name="add_visit")
-     * @param $teacherId
+     * @Route ("/user/teacher/discipline/{disciplineId}/group/{groupId}/student/{studentId}/plus/{plus}/", name="add_visit")
      * @param $disciplineId
      * @param $groupId
      * @param $studentId
      * @param $plus
-     * @param Request $request
-     * @return RedirectResponse|Response
+     * @param EntityManagerInterface $em
+     * @param Session $session
+     * @return Response
      */
 
-    public function addVisit($teacherId, $disciplineId, $groupId, $studentId, $plus, EntityManagerInterface $em):Response
+    public function addVisit($disciplineId, $groupId, $studentId, $plus, EntityManagerInterface $em, Session $session):Response
     {
+        $teacherId = $session->get('teacherId');
         $teacher = $this->getDoctrine()->getRepository(Teacher::class)->find($teacherId);
         $discipline = $this->getDoctrine()->getRepository(Discipline::class)->find($disciplineId);
         $student =  $this->getDoctrine()->getRepository(Student::class)->find($studentId);
@@ -115,7 +111,6 @@ class TeacherController extends BaseController
         $em->flush();
 
         $forRender = parent::renderDefault();
-        $forRender['teacherId'] = $teacherId;
         $forRender['disciplineId'] = $disciplineId;
         $forRender['groupId'] = $groupId;
         $forRender['title'] = 'Группа - ';
@@ -123,15 +118,14 @@ class TeacherController extends BaseController
     }
 
     /**
-     * @Route ("/user/teacher/{teacherId}/discipline/{disciplineId}/student/{studentId}/", name="teacher_statistic")
-     * @param $teacherId
+     * @Route ("/user/teacher/discipline/{disciplineId}/student/{studentId}/", name="teacher_statistic")
      * @param $disciplineId
      * @param $studentId
-     * @param Request $request
-     * @return RedirectResponse|Response
+     * @param EntityManagerInterface $em
+     * @return Response
      */
 
-    public function statistic($teacherId, $disciplineId, $studentId, EntityManagerInterface $em):Response
+    public function statistic($disciplineId, $studentId, EntityManagerInterface $em):Response
     {
         $student = $this->getDoctrine()->getRepository(Student::class)->find($studentId);
         $user = $student->getStudentId();
@@ -143,23 +137,21 @@ class TeacherController extends BaseController
         $forRender['user'] = $user;
         $forRender['discipline'] = $discipline;
         $forRender['statistics'] = $statistic;
-        $forRender['teacherId'] = $teacherId;
         $forRender['disciplineId'] = $disciplineId;
         $forRender['studentId'] = $studentId;
         return $this->render('main/authorized/teacher/statistic.html.twig', $forRender);
     }
 
     /**
-     * @Route ("/user/teacher/{teacherId}/discipline/{disciplineId}/student/{studentId}/deleteVisit/{id}", name="delete_visit")
-     * @param $teacherId
+     * @Route ("/user/teacher/discipline/{disciplineId}/student/{studentId}/deleteVisit/{id}", name="delete_visit")
      * @param $disciplineId
      * @param $studentId
      * @param $id
-     * @param Request $request
-     * @return RedirectResponse|Response
+     * @param EntityManagerInterface $em
+     * @return Response
      */
 
-    public function deleteVisit($teacherId, $disciplineId, $studentId, $id, EntityManagerInterface $em):Response
+    public function deleteVisit($disciplineId, $studentId, $id, EntityManagerInterface $em):Response
     {
         $visit = $em->getRepository(Visit::class)->find($id);
 
@@ -167,7 +159,6 @@ class TeacherController extends BaseController
         $em->flush();
 
         $forRender = parent::renderDefault();
-        $forRender['teacherId'] = $teacherId;
         $forRender['disciplineId'] = $disciplineId;
         $forRender['studentId'] = $studentId;
         return $this->redirectToRoute('teacher_statistic', $forRender);

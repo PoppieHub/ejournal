@@ -3,10 +3,12 @@
 
 namespace App\Controller\Main;
 
+use App\Entity\Teacher;
 use App\Service\FileManagerServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends BaseController
@@ -23,26 +25,38 @@ class HomeController extends BaseController
     #[Route('/user/profile', name: '_profile')]
     public function profile(Request $request, FileManagerServiceInterface $fileManagerService, EntityManagerInterface $em): Response
     {
-        $thisUser = $this->getUser();
-        $id = $thisUser->getId();
-        $user = $em->getRepository('App:User')->find($id);
+        $userId = $this->getUser()->getId();
+        $session = $this->get('session');
+        $session->set('user',$this->getUser());
+
+        if ($em->getRepository('App:Teacher')->findBy(['teacher' => $userId])){
+            $teacherAccess = true;
+            $session->set('teacherAccess',$teacherAccess);
+        }
+        if ($em->getRepository('App:Student')->findBy(['student' => $userId]))
+        {
+            $studentAccess = true;
+            $session->set('studentAccess',$studentAccess);
+        }
+
+        $user = $em->getRepository('App:User')->find($userId);
 
         $form = $this->createForm('App\Form\UserImageFormType',$user);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){
-            $image = $form->get('image')->getData();
-            $imageOld = $user->getImage();
-            if ($image){
-                if($imageOld){
-                    $fileManagerService->removeUserImage($imageOld);
-                }
-                $fileName = $fileManagerService->imageUserUpload($image);
-                $user->setImage($fileName);
-                $em->persist($user);
-                $em->flush();
+            if ($form->isSubmitted() && $form->isValid()){
+                $image = $form->get('image')->getData();
+                $imageOld = $user->getImage();
+                    if ($image){
+                        if($imageOld){
+                            $fileManagerService->removeUserImage($imageOld);
+                        }
+                        $fileName = $fileManagerService->imageUserUpload($image);
+                        $user->setImage($fileName);
+                        $em->persist($user);
+                        $em->flush();
+                    }
+                return $this->redirectToRoute('_profile');
             }
-            return $this->redirectToRoute('_profile');
-        }
 
         $forRender = parent::renderDefault();
         $forRender['user'] =  $user;
@@ -52,23 +66,19 @@ class HomeController extends BaseController
     }
 
     /**
-     * @Route("/user/profile/deleteImage/{id}", name="delete_image")
-     * @param $id
-     * @param FileManagerServiceInterface $fileManagerService
-     * @param EntityManagerInterface $em
-     * @return Response
+     * @Route("/user/profile/deleteImage/", name="delete_image")
      */
-
-    public function deleteImage($id ,FileManagerServiceInterface $fileManagerService, EntityManagerInterface $em):Response
+    public function deleteImage(FileManagerServiceInterface $fileManagerService, EntityManagerInterface $em, Session $session):Response
     {
-        $user = $em->getRepository('App:User')->find($id);
-        if($user->getImage() != null){
-            $image = $user->getImage();
-            $fileManagerService->removeUserImage($image);
-            $user->setImage(null);
-            $em->persist($user);
-            $em->flush();
-        }
+        $userId = $session->get('user')->getId();
+        $user = $em->getRepository('App:User')->find($userId);
+            if($user->getImage() != null){
+                $image = $user->getImage();
+                $fileManagerService->removeUserImage($image);
+                $user->setImage(null);
+                $em->persist($user);
+                $em->flush();
+            }
         return $this->redirectToRoute('_profile');
     }
 

@@ -1,9 +1,9 @@
-{% extends 'main/authorized/profile.html.twig' %}
+{% extends 'admin/baseAdminProfile.html.twig' %}
 
-{% block title %}Статистика студента{% endblock %}
+{% block title %}{{ user.LastName }} {{ user.FirstName }} {{ user.MiddleName }}{% endblock %}
 
 {% block contentTitle %}
-    <h1>{{ title }}{{ discipline.name_discipline }}</h1>
+    <h1>{{ title }}</h1>
 {% endblock %}
 {% block content %}
     <div class="row g-1">
@@ -29,12 +29,8 @@
                                     <p class="card-text text-center">{{ statistic.dateTime|date("d-m-Y") }}</p>
                                     <hr>
                                     <p class="card-text text-center">{{ statistic.operation}}</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            <a href="{{ path('delete_visit', {disciplineId :disciplineId, studentId :studentId, id :statistic.id}) }}" type="button" class="btn-sm btn-outline-danger"><i class="fas fa-times"></i></a>
-                                        </div>
-                                        <small class="text-muted">{{ difference|date }}</small>
-                                    </div>
+                                    <p class="card-text text-center">{{ statistic.name_discipline}}</p>
+                                    <small class="text-muted">{{ difference|date }}</small>
                                 </div>
                             </div>
                         </div>
