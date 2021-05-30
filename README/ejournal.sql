@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Май 30 2021 г., 00:00
+-- Время создания: Май 30 2021 г., 22:57
 -- Версия сервера: 8.0.19
 -- Версия PHP: 8.0.1
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `discipline` (
   `id` int NOT NULL,
-  `name_discipline` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `name_discipline` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -50,7 +50,7 @@ INSERT INTO `discipline` (`id`, `name_discipline`) VALUES
 --
 
 CREATE TABLE `doctrine_migration_versions` (
-  `version` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+  `version` varchar(191) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `executed_at` datetime DEFAULT NULL,
   `execution_time` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -71,7 +71,7 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 
 CREATE TABLE `group` (
   `id` int NOT NULL,
-  `group_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `group_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -100,7 +100,7 @@ INSERT INTO `group` (`id`, `group_name`) VALUES
 
 CREATE TABLE `plus` (
   `id` int NOT NULL,
-  `operation` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `operation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -159,14 +159,14 @@ INSERT INTO `teacher` (`id`, `teacher_id`) VALUES
 
 CREATE TABLE `user` (
   `id` int NOT NULL,
-  `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `roles` json NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `middle_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `middle_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_verified` tinyint(1) NOT NULL,
-  `image` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `image` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -176,8 +176,8 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `first_name`, `last_name`, `middle_name`, `is_verified`, `image`) VALUES
 (1, 'test@test.com', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$pE73BmJdSdyqm5VVljhJnA$dUSD9TIeR7s1H2ivNjWHeq1HMpwbUuzO+8C9ZhGJ5+E', 'Андрей', 'Королев', 'Дмитриевич', 1, '60b00e3aa926b.gif'),
 (9, 'yy@yy', '[\"ROLE_STUDENT\"]', '$argon2id$v=19$m=65536,t=4,p=1$UpcMCfN79qLXRdmkrZKijg$Evw2anb7hmzVX71LMMpnPJCBNtW33VtrdqpiJepMjoY', 'Тестовый', 'Студент', 'Тестович', 1, NULL),
-(13, 'tt@tt', '[\"ROLE_ASTUDENT_ATEACHER\"]', '$argon2id$v=19$m=65536,t=4,p=1$WDuPC/h6N831/ycwOAAMAQ$co80ULBjyQovC47HeQLYJuHazPBNcWqltlYRJNIO0U0', 'Тестовый', 'Препод', 'Тестович', 1, '60afba4d8c9b5.jpg'),
-(14, 'kk@kk', '[\"ROLE_ASTUDENT_ATEACHER\"]', '$argon2id$v=19$m=65536,t=4,p=1$Iq7uQCP5b1ajn1HgEKL18Q$gGqnKnwFMFW63ZOtR0UEu1ircL00Q4mZx5OYzilgSlw', 'Имямя', 'Фамилия', 'Отчествович', 1, '60ae79cd2a879.jpg');
+(13, 'tt@tt', '[\"ROLE_ATEACHER\"]', '$argon2id$v=19$m=65536,t=4,p=1$WDuPC/h6N831/ycwOAAMAQ$co80ULBjyQovC47HeQLYJuHazPBNcWqltlYRJNIO0U0', 'Тестовый', 'Препод', 'Тестович', 1, '60afba4d8c9b5.jpg'),
+(14, 'kk@kk', '[\"ROLE_ATEACHER\"]', '$argon2id$v=19$m=65536,t=4,p=1$Iq7uQCP5b1ajn1HgEKL18Q$gGqnKnwFMFW63ZOtR0UEu1ircL00Q4mZx5OYzilgSlw', 'Имямя', 'Фамилия', 'Отчествович', 1, '60ae79cd2a879.jpg');
 
 -- --------------------------------------------------------
 
