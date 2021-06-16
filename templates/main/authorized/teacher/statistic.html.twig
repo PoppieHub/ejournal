@@ -7,23 +7,23 @@
 {% endblock %}
 {% block content %}
     <div class="row g-1">
-        <div class=" col-md-2 py-2" style="width: 15%">
+        <div class=" col-md-2 py-2" style="width: 15%; min-width: 100px;">
             {% if user.image is null %}
                 <img style="width: 100%;" class="card-img-top rounded" src="/public/assets/main/images/avatar-default.svg" alt="Card image">
             {% else %}
                 <img style="width: 100%;" class="card-img-top rounded" src="/public/assets/main/images/user/{{ user.image }}" alt="Card image">
             {% endif %}
             <div class="card-body">
-                <h5 class="card-title">{{ user.LastName }} {{ user.FirstName }} {{ user.MiddleName }}</h5>
-                <p class="card-text"><b>Email</b>: {{ user.Email }} </p>
+                <h6 class="card-text">{{ user.LastName }} {{ user.FirstName }} {{ user.MiddleName }}</h6>
+                <p class="card-tittle"><b>Email</b>: {{ user.Email }} </p>
             </div>
         </div>
         <div class="col-md-10 py-2 album bg-light">
             <div class="container">
-                <div class="row">
+                <div class="row row-coll-md-4">
                     {% for statistic in statistics %}
                         {% set difference = date(statistic.dateTime|date('Y-m-d H:i:s')).diff(date('now'|date('Y-m-d H:i:s'))) %}
-                        <div class="col-md-2">
+                        <div class="col-md-4" style="max-width: 250px;">
                             <div class="card mb-4 shadow-sm">
                                 <div class="card-body">
                                     <p class="card-text text-center">{{ statistic.dateTime|date("d-m-Y") }}</p>

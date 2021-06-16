@@ -13,15 +13,17 @@
 {% endblock %}
 {% block content %}
     <div class="row g-0">
-        <div class="col-md-3" style="margin-top: 15px">
+        <div class="col-md-4" style="margin-top: 15px; min-height: 400px; max-width: 400px;">
             {% if user.image is null %}
-                <img style="width: 100%;" class="img-fluid rounded" src="/public/assets/main/images/avatar-default.svg">
+                <img style="width: 100%; max-width: 400px; max-height: 500px;" class="img-fluid rounded" src="/public/assets/main/images/avatar-default.svg">
             {% else %}
-                <img style="width: 100%;" class="img-fluid rounded" src="/public/assets/main/images/user/{{ user.image }}">
+                <img style="width: 100%; max-width: 400px; max-height: 500px;" class="img-fluid rounded" src="/public/assets/main/images/user/{{ user.image }}">
             {% endif %}
-            <a type="button" class="btn btn-outline-secondary mt-2" data-bs-toggle="modal" data-bs-target="#ChangeModal">
-                Изменить аватар
-            </a>
+            <div class="col-12 col-lg-12">
+                <a type="button" class="btn btn-outline-secondary mt-2" data-bs-toggle="modal" data-bs-target="#ChangeModal">
+                    Изменить аватар
+                </a>
+            </div>
         </div>
         <div class="col-md-8">
             <div class="card-body">

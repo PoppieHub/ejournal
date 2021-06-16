@@ -34,7 +34,6 @@ class FileManagerService implements FileManagerServiceInterface
         catch (FileException $exception){
             return $exception;
         }
-
         return $fileName;
     }
 
