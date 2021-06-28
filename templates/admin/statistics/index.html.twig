@@ -17,7 +17,7 @@
         <div class="row no-gutters">
             <div class="col-12 mt-4">
                 <h2>Список групп</h2>
-                {% set count = 0 %}
+                {% set count = 1 %}
                 <table class="table table-hover text-center">
                     <thead>
                     <tr>
@@ -30,7 +30,7 @@
                     </thead>
                     <tbody>
                     {% for listGroup in listGroups %}
-                        {% set count = count + 1 %}
+                    {% if listGroup.group_name is not null %}
                         <tr>
                             <th scope="row">{{ count }}</th>
                             <td>{{ listGroup.group_name }}</td>
@@ -63,6 +63,8 @@
                                 {% endif %}
                             </td>
                         </tr>
+                        {% set count = count + 1 %}
+                    {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>

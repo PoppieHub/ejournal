@@ -24,10 +24,10 @@
 
     <div class="container-fluid">
         <div class="row no-gutters">
-            <div class="col-12 mt-4">
+            <div class="col-12 mt-2">
                 <h2>Список пользователей</h2>
                 {% set count = 0 %}
-                <table class="table table-hover text-center col-12 table-scrollable">
+                <table class="table table-hover">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -36,9 +36,7 @@
                         <th scope="col">Фамилия</th>
                         <th scope="col">Имя</th>
                         <th scope="col">Отчество</th>
-                        <th scope="col" colspan="3" class="col-1"> Действие</th>
-                        <th class=""></th>
-                        <th class=""></th>
+                        <th scope="col">Действие</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -53,11 +51,7 @@
                                 <td>{{user.MiddleName}}</td>
                                 <td>
                                     <a href="{{ path('admin_user_delete', {id: user.id})}}" type="button" class="btn btn-outline-danger"><i class="far fa-trash-alt"></i></a>
-                                </td>
-                                <td>
                                     <a href="{{ path('admin_user_edit', {id: user.id})}}" type="button" class="btn btn-outline-dark"><i class="fas fa-user-edit"></i></a>
-                                </td>
-                                <td>
                                     <a href="{{ path('admin_user_confirm', {id: user.id})}}" type="button" class="btn btn-outline-success"><i class="fas fa-check"></i></a>
                                 </td>
                             </tr>

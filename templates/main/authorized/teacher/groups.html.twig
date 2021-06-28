@@ -10,11 +10,13 @@
         <div class="card-body">
             <div class="list-group">
                 <h5>Доступные группы:</h5>
-                {% set countA = 0 %}
-                {% for group in groups %}
-                    {% set countA = countA + 1 %}
-                    <a href="{{ path('list_students', {disciplineId: group.disciplineId, groupId: group.groupId}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countA }}. </b>{{ group.group_name }}</a>
-                {% endfor %}
+                    {% set countA = 0 %}
+                    {% for group in groups %}
+                        {% if group.groupId is not null %}
+                        {% set countA = countA + 1 %}
+                        <a href="{{ path('list_students', {disciplineId: group.disciplineId, groupId: group.groupId}) }}" class="list-group-item list-group-item-action mt-1"><b>{{ countA }}. </b>{{ group.group_name }}</a>
+                        {% endif %}
+                    {% endfor %}
             </div>
             <hr>
             <h5>Остальные группы:</h5>
